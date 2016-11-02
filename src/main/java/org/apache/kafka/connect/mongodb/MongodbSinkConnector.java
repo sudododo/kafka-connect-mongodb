@@ -27,6 +27,9 @@ public class MongodbSinkConnector extends SinkConnector {
     public static final String DATABASE = "mongodb.database";
     public static final String COLLECTIONS = "mongodb.collections";
     public static final String TOPICS = "topics";
+    public static final String USER = "user";
+    public static final String PASSWORD = "password";
+    public static final String URI = "uri";    
 
     private String port;
     private String host;
@@ -34,6 +37,9 @@ public class MongodbSinkConnector extends SinkConnector {
     private String database;
     private String collections;
     private String topics;
+    private String user;
+    private String password;
+    private String uri;
 
     /**
      * Get the version of this connector.
@@ -70,6 +76,10 @@ public class MongodbSinkConnector extends SinkConnector {
         database = map.get(DATABASE);
         collections = map.get(COLLECTIONS);
         topics = map.get(TOPICS);
+
+        user = map.get(USER);
+        password = map.get(PASSWORD);
+        uri = map.get(URI);
 
         if (collections.split(",").length != topics.split(",").length) {
             throw new ConnectException("The number of topics should be the same as the number of collections");
@@ -112,7 +122,10 @@ public class MongodbSinkConnector extends SinkConnector {
             config.put(DATABASE, database);
             config.put(COLLECTIONS, StringUtils.join(dbsGrouped.get(i), ","));
             config.put(TOPICS, StringUtils.join(topicsGrouped.get(i), ","));
-            configs.add(config);
+            config.put(USER, user);
+            config.put(PASSWORD, password);
+            config.put(URI, uri);
+ 	    configs.add(config);
         }
         return configs;
     }
